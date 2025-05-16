@@ -1,0 +1,35 @@
+{
+  "name": "DynamoDB JSON Converter",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-typescript-tslint-plugin"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        }
+      }
+    }
+  },
+  "remoteUser": "node",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22.15.0"
+    },
+    "ghcr.io/devcontainers/features/aws-cli:1": {}
+  },
+  "postCreateCommand": {
+    "install": "npm install",
+    "envrc": "echo 'source ${containerWorkspaceFolder}/.envrc' >> ~/.bashrc"
+  }
+}
