@@ -24,7 +24,7 @@
   "remoteUser": "node",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "22.15.0"
+      "version": "22"
     },
     "ghcr.io/devcontainers/features/aws-cli:1": {}
   },
