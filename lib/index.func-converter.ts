@@ -1,33 +1,25 @@
-import { Logger } from "@aws-lambda-powertools/logger";
-import { injectLambdaContext } from "@aws-lambda-powertools/logger/middleware";
-import { parser } from "@aws-lambda-powertools/parser/middleware";
-import { DynamoDBStreamRecord } from "@aws-lambda-powertools/parser/schemas/dynamodb";
-import middy from "@middy/core";
-import { z } from "zod";
-
-const logger = new Logger({ serviceName: "Converter" });
+import { AttributeValue } from "@aws-sdk/client-dynamodb";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
+import { DynamoDBRecord } from "aws-lambda";
 
 type MyEvent = {
   events: Record<string, unknown>[];
 };
 
-const pipesDynamoDBStreamSchema = z.array(DynamoDBStreamRecord);
-
-type PipesDynamoDBStream = z.infer<typeof pipesDynamoDBStreamSchema>;
-
-const baseHandler = async (
-  event: PipesDynamoDBStream
+export const handler = async (
+  event: DynamoDBRecord[]
 ): Promise<MyEvent | {}> => {
   return {
     events: event
       .map((record) => {
-        return record.dynamodb.NewImage;
+        if (record.dynamodb?.NewImage) {
+          return unmarshall(
+            record.dynamodb.NewImage as Record<string, AttributeValue>
+          );
+        } else {
+          return undefined;
+        }
       })
       .filter((v) => v !== undefined),
   };
 };
-
-export const handler = middy()
-  .use(injectLambdaContext(logger, { logEvent: true }))
-  .use(parser({ schema: pipesDynamoDBStreamSchema }))
-  .handler(baseHandler);

@@ -16,6 +16,10 @@ export AWS_SESSION_TOKEN="<secret>"
 
 TODO: WIP
 
+3. `cdk deploy` の実行
+
+4. デモ実行
+
 ```bash: テストコマンド
-curl -X POST -d '{"userId": "USER#123", "location":{"latitude": 35.1, "longitude": 135.1}}' 'https://q7ahx1t5l0.execute-api.ap-northeast-1.amazonaws.com/prod/'
+curl -X POST -d '{"userId": "USER#123", "location":{"latitude": 35.123, "longitude": 135.1}}' 'https://tkwzem2awk.execute-api.ap-northeast-1.amazonaws.com/prod/rides'
 ```
