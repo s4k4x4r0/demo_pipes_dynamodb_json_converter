@@ -9,9 +9,11 @@ import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as lambda from "aws-cdk-lib/aws-lambda";
+import { LayerVersion } from "aws-cdk-lib/aws-lambda";
 import * as lambda_nodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import * as logs from "aws-cdk-lib/aws-logs";
 import * as ssm from "aws-cdk-lib/aws-ssm";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import * as path from "path";
 
@@ -21,20 +23,40 @@ export class DemoPipesDynamodbJsonConverterStack extends Stack {
 
     const parameterPrefix = `/${this.stackName}`;
 
+    const powertoolsLayer = LayerVersion.fromLayerVersionArn(
+      this,
+      "PowertoolsLayer",
+      StringParameter.valueForStringParameter(
+        this,
+        "/aws/service/powertools/typescript/generic/all/latest"
+      )
+    );
+
     const producer = new lambda_nodejs.NodejsFunction(
       this,
       "FunctionProducer",
       {
         runtime: lambda.Runtime.NODEJS_22_X,
         entry: path.join(import.meta.dirname, `index.func-producer.ts`),
+        layers: [powertoolsLayer],
         bundling: {
           format: lambda_nodejs.OutputFormat.ESM,
           target: "es2022",
+          mainFields: ["module", "main"],
+          sourcesContent: false,
+          minify: true,
+          metafile: true,
+          externalModules: ["@aws-lambda-powertools/*", "@aws-sdk/*"],
+          banner:
+            "const require = (await import('node:module')).createRequire(import.meta.url);const __filename = (await import('node:url')).fileURLToPath(import.meta.url);const __dirname = (await import('node:path')).dirname(__filename);",
         },
         environment: {
           PARAMETER_PREFIX: parameterPrefix,
         },
         logRetention: logs.RetentionDays.ONE_DAY,
+        loggingFormat: lambda.LoggingFormat.JSON,
+        systemLogLevelV2: lambda.SystemLogLevel.DEBUG,
+        applicationLogLevelV2: lambda.ApplicationLogLevel.TRACE,
       }
     );
 
@@ -75,8 +97,18 @@ export class DemoPipesDynamodbJsonConverterStack extends Stack {
         bundling: {
           format: lambda_nodejs.OutputFormat.ESM,
           target: "es2022",
+          mainFields: ["module", "main"],
+          sourcesContent: false,
+          minify: true,
+          metafile: true,
+          externalModules: ["@aws-lambda-powertools/*", "@aws-sdk/*"],
+          banner:
+            "const require = (await import('node:module')).createRequire(import.meta.url);const __filename = (await import('node:url')).fileURLToPath(import.meta.url);const __dirname = (await import('node:path')).dirname(__filename);",
         },
         logRetention: logs.RetentionDays.ONE_DAY,
+        loggingFormat: lambda.LoggingFormat.JSON,
+        systemLogLevelV2: lambda.SystemLogLevel.DEBUG,
+        applicationLogLevelV2: lambda.ApplicationLogLevel.TRACE,
       }
     );
 
@@ -86,11 +118,22 @@ export class DemoPipesDynamodbJsonConverterStack extends Stack {
       {
         runtime: lambda.Runtime.NODEJS_22_X,
         entry: path.join(import.meta.dirname, `index.func-consumer.ts`),
+        layers: [powertoolsLayer],
         bundling: {
           format: lambda_nodejs.OutputFormat.ESM,
           target: "es2022",
+          mainFields: ["module", "main"],
+          sourcesContent: false,
+          minify: true,
+          metafile: true,
+          externalModules: ["@aws-lambda-powertools/*", "@aws-sdk/*"],
+          banner:
+            "const require = (await import('node:module')).createRequire(import.meta.url);const __filename = (await import('node:url')).fileURLToPath(import.meta.url);const __dirname = (await import('node:path')).dirname(__filename);",
         },
         logRetention: logs.RetentionDays.ONE_DAY,
+        loggingFormat: lambda.LoggingFormat.JSON,
+        systemLogLevelV2: lambda.SystemLogLevel.DEBUG,
+        applicationLogLevelV2: lambda.ApplicationLogLevel.TRACE,
       }
     );
 
