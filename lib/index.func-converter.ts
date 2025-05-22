@@ -1,11 +1,8 @@
-import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { DynamoDBStreamEvent } from "aws-lambda";
-import { AttributeValue } from "@aws-sdk/client-dynamodb";
 import { Logger } from "@aws-lambda-powertools/logger";
 import { injectLambdaContext } from "@aws-lambda-powertools/logger/middleware";
-import middy from "@middy/core";
 import { parser } from "@aws-lambda-powertools/parser/middleware";
 import { DynamoDBStreamRecord } from "@aws-lambda-powertools/parser/schemas/dynamodb";
+import middy from "@middy/core";
 import { z } from "zod";
 
 const logger = new Logger({ serviceName: "Converter" });

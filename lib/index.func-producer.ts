@@ -1,15 +1,15 @@
-import { APIGatewayProxyResult } from "aws-lambda";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { v7 as uuidv7 } from "uuid";
-import middy from "@middy/core";
-import { parser } from "@aws-lambda-powertools/parser/middleware";
-import { z } from "zod";
-import { APIGatewayProxyEventSchema } from "@aws-lambda-powertools/parser/schemas";
-import { JSONStringified } from "@aws-lambda-powertools/parser/helpers";
 import { Logger } from "@aws-lambda-powertools/logger";
 import { injectLambdaContext } from "@aws-lambda-powertools/logger/middleware";
 import { getParameter } from "@aws-lambda-powertools/parameters/ssm";
+import { JSONStringified } from "@aws-lambda-powertools/parser/helpers";
+import { parser } from "@aws-lambda-powertools/parser/middleware";
+import { APIGatewayProxyEventSchema } from "@aws-lambda-powertools/parser/schemas";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import middy from "@middy/core";
+import { APIGatewayProxyResult } from "aws-lambda";
+import { v7 as uuidv7 } from "uuid";
+import { z } from "zod";
 
 const logger = new Logger({ serviceName: "Producer" });
 

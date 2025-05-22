@@ -1,19 +1,19 @@
-import { Stack, StackProps, RemovalPolicy } from "aws-cdk-lib";
-import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
-import * as lambda from "aws-cdk-lib/aws-lambda";
-import * as lambda_nodejs from "aws-cdk-lib/aws-lambda-nodejs";
-import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import * as pipes from "@aws-cdk/aws-pipes-alpha";
-import { Construct } from "constructs";
+import { LambdaEnrichment } from "@aws-cdk/aws-pipes-enrichments-alpha";
 import {
   DynamoDBSource,
   DynamoDBStartingPosition,
 } from "@aws-cdk/aws-pipes-sources-alpha";
 import { LambdaFunction } from "@aws-cdk/aws-pipes-targets-alpha";
-import { LambdaEnrichment } from "@aws-cdk/aws-pipes-enrichments-alpha";
-import * as path from "path";
-import * as ssm from "aws-cdk-lib/aws-ssm";
+import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
+import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as lambda_nodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import * as logs from "aws-cdk-lib/aws-logs";
+import * as ssm from "aws-cdk-lib/aws-ssm";
+import { Construct } from "constructs";
+import * as path from "path";
 
 export class DemoPipesDynamodbJsonConverterStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
