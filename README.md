@@ -2,7 +2,7 @@
 
 CDK でデプロイできる。
 
-## デモ実行前の事前準備
+## デモ手順
 
 1. `.envrc` の設定
 
@@ -12,6 +12,7 @@ AWS の認証情報は次のように設定できる。
 export AWS_ACCESS_KEY_ID="<secret>"
 export AWS_SECRET_ACCESS_KEY="<secret>"
 export AWS_SESSION_TOKEN="<secret>"
+export AWS_REGION="<region>"
 ```
 
 2. `cdk bootstrap`の実行
@@ -27,6 +28,8 @@ cdk bootstrap
 ```bash: デプロイコマンド
 cdk deploy
 ```
+
+API Gateway の FQDN が出力されるのでメモしておくこと。
 
 4. デモ実行
 
